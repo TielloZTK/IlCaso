@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>NotOkMugello</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FFFFFF; --panel:#F2F4F3; --stripe:#E6EAE8; --ink:#1C2024; --stone:#56636B;
+  --hill:#2C5B3B; --rule:#DCE1DF; --signal:#FFD23F; --on-signal:#1C2024;
+  --bar:#1C2024; --on-bar:#FFFFFF; --alert:#B3261E;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#131719; --panel:#1B2124; --stripe:#232A2E; --ink:#E9EDEC; --stone:#9DAAB1;
+    --hill:#8CCB9F; --rule:#2C3337; --signal:#FFD23F; --on-signal:#15181B;
+    --bar:#000000; --on-bar:#F2F4F3; --alert:#FF8A80;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131719; --panel:#1B2124; --stripe:#232A2E; --ink:#E9EDEC; --stone:#9DAAB1;
+  --hill:#8CCB9F; --rule:#2C3337; --signal:#FFD23F; --on-signal:#15181B;
+  --bar:#000000; --on-bar:#F2F4F3; --alert:#FF8A80;
+  color-scheme: dark;
+}
+html{ scroll-padding-top: env(safe-area-inset-top, 0px); background: var(--paper); -webkit-text-size-adjust: 100%; }
+*, *::before, *::after{ box-sizing: inherit; }
+body{
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: "Newsreader", Georgia, "Times New Roman", serif;
+  font-size: 1.0625rem; line-height: 1.6; font-optical-sizing: auto;
+}
+img{ max-width: 100%; height: auto; display: block; }
+a{ color: inherit; }
+:focus-visible{ outline: 3px solid var(--hill); outline-offset: 2px; }
+.sans{ font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; }
+
+/* Testata */
+.masthead{ background: var(--signal); color: var(--on-signal); }
+.masthead-inner{
+  max-width: 72rem; margin: 0 auto; padding: 1.1rem 1.25rem .5rem;
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: .3rem 1.4rem;
+}
+.wordmark{
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; font-stretch: 72%;
+  font-size: clamp(2.2rem, 7.5vw, 3.5rem); line-height: 1; text-decoration: none;
+  display: inline-flex; align-items: baseline; letter-spacing: -0.01em;
+}
+.wordmark:focus-visible{ outline-color: var(--on-signal); }
+.wm-not{
+  display: inline-block; background: var(--on-signal); color: var(--signal);
+  font-weight: 800; padding: .03em .14em .07em; margin-right: .08em;
+  transform: rotate(-4deg); border-radius: 2px;
+}
+.wm-ok{ font-weight: 800; }
+.wm-place{ font-weight: 400; font-stretch: 88%; margin-left: .14em; }
+.tagline{
+  margin: 0; font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-size: .95rem; font-stretch: 95%;
+}
+.sections{
+  max-width: 72rem; margin: 0 auto; padding: 0 1.25rem;
+  display: flex; gap: 1.5rem; overflow-x: auto; scrollbar-width: none;
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; font-weight: 600; font-size: .98rem;
+}
+.sections::-webkit-scrollbar{ display: none; }
+.sections a{ text-decoration: none; padding: .55rem 0 .55rem; border-bottom: 3px solid transparent; white-space: nowrap; }
+.sections a:hover{ border-bottom-color: rgba(0,0,0,.25); }
+.sections a[aria-current="page"]{ border-bottom-color: var(--on-signal); }
+.sections a:focus-visible{ outline-color: var(--on-signal); }
+
+/* Ultim'ora */
+.breaking{ background: var(--bar); color: var(--on-bar); }
+.breaking-inner{
+  max-width: 72rem; margin: 0 auto; padding: .6rem 1.25rem;
+  display: flex; gap: .75rem; align-items: baseline;
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; font-size: .95rem; line-height: 1.35;
+}
+.breaking-label{
+  flex: none; background: var(--signal); color: var(--on-signal);
+  font-weight: 700; padding: .06rem .45rem; border-radius: 2px;
+}
+.breaking a{ text-decoration: none; }
+.breaking a:hover{ text-decoration: underline; }
+.breaking a:focus-visible{ outline-color: var(--signal); }
+
+/* Impaginazione */
+main{ max-width: 72rem; margin: 0 auto; padding: 1.6rem 1.25rem 3.5rem; }
+.home-grid{ display: grid; gap: 2.5rem; }
+@media (min-width: 900px){ .home-grid{ grid-template-columns: minmax(0, 1fr) 18rem; gap: 3.25rem; } }
+
+.kicker{
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; font-weight: 600;
+  font-size: .92rem; color: var(--hill); margin: 0 0 .3rem;
+}
+.meta{
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; font-size: .87rem;
+  color: var(--stone); margin: 0;
+}
+.standfirst{ font-size: 1.15rem; line-height: 1.5; margin: 0 0 .7rem; }
+
+.lead-link{ display: block; text-decoration: none; }
+.lead .ph{ margin: 0 0 1rem; }
+.lead h2{
+  font-size: clamp(1.8rem, 4.6vw, 2.8rem); line-height: 1.1; font-weight: 700;
+  letter-spacing: -0.012em; margin: 0 0 .65rem; text-wrap: balance;
+}
+.lead-link:hover h2{ text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .12em; }
+
+.block-title, .aside-title{
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; font-weight: 700;
+  font-size: 1.05rem; margin: 0; padding: .55rem 0 .5rem; border-top: 3px solid var(--ink);
+}
+.block-title{ margin-top: 2.4rem; }
+.story-list{ list-style: none; margin: 0; padding: 0; }
+.story-list li{ border-top: 1px solid var(--rule); }
+.story-list li:first-child{ border-top: 0; }
+.story-list a{ display: block; padding: .95rem 0 1rem; text-decoration: none; }
+.story-list h3{ font-size: 1.32rem; line-height: 1.25; font-weight: 650; margin: 0 0 .3rem; text-wrap: pretty; }
+.story-list .summary{ margin: 0 0 .35rem; font-size: 1.02rem; line-height: 1.5; color: var(--ink); }
+.story-list a:hover h3{ text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .14em; }
+.badge{
+  display: inline-block; font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-size: .76rem; font-weight: 700; line-height: 1.3; background: var(--signal); color: var(--on-signal);
+  padding: .05rem .4rem; border-radius: 2px; margin-left: .45rem; vertical-align: .2em; white-space: nowrap;
+}
+
+.ranking{ list-style: none; counter-reset: r; margin: 0; padding: 0; }
+.ranking li{
+  counter-increment: r; display: grid; grid-template-columns: 2rem 1fr; gap: .55rem;
+  padding: .8rem 0; border-top: 1px solid var(--rule);
+}
+.ranking li:first-child{ border-top: 0; }
+.ranking li::before{
+  content: counter(r); font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 800; font-stretch: 72%; font-size: 1.7rem; line-height: 1; color: var(--hill);
+}
+.ranking a{ text-decoration: none; font-size: 1.05rem; line-height: 1.3; font-weight: 600; }
+.ranking a:hover{ text-decoration: underline; text-underline-offset: .14em; }
+
+/* Segnaposto foto */
+.ph{ margin: 0; }
+.ph-box{
+  aspect-ratio: 16 / 9; border-radius: 3px; display: grid; place-items: center;
+  background: repeating-linear-gradient(135deg, var(--panel) 0 14px, var(--stripe) 14px 28px);
+}
+.ph-box span{
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; font-size: .9rem; color: var(--stone);
+  background: var(--paper); padding: .25rem .6rem; border-radius: 2px;
+}
+figcaption{
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; font-size: .85rem;
+  line-height: 1.4; color: var(--stone); margin-top: .5rem;
+}
+
+/* Articolo */
+.story{ max-width: 42rem; margin: 0 auto; }
+.back{
+  display: inline-block; margin: 0 0 1.2rem; text-decoration: none; color: var(--stone);
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; font-size: .92rem;
+}
+.back:hover{ color: var(--ink); text-decoration: underline; }
+.story h1{
+  font-size: clamp(1.95rem, 5.4vw, 2.9rem); line-height: 1.1; font-weight: 700;
+  letter-spacing: -0.012em; margin: .1rem 0 .8rem; text-wrap: balance;
+}
+.story .standfirst{ font-size: 1.22rem; }
+.byline{
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; font-size: .9rem;
+  line-height: 1.5; color: var(--stone); margin: 1rem 0 1.5rem;
+}
+.byline strong{ color: var(--ink); font-weight: 600; }
+.story .ph{ margin: 0 0 1.7rem; }
+.story-body p{ margin: 0 0 1.05em; font-size: 1.125rem; line-height: 1.7; }
+.story-sub{ font-size: 1.3rem; line-height: 1.3; font-weight: 700; margin: 1.9rem 0 .6rem; }
+
+/* Commenti */
+.comments{ margin-top: 2.6rem; }
+.comments-title{
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; font-size: 1.05rem; font-weight: 700;
+  margin: 0; padding: .55rem 0 .3rem; border-top: 3px solid var(--ink);
+}
+.comment-list{ list-style: none; margin: 0; padding: 0; }
+.comment{ padding: .9rem 0; border-top: 1px solid var(--rule); }
+.comment:first-child{ border-top: 0; }
+.comment p{ margin: 0; font-size: 1.03rem; line-height: 1.55; }
+.comment .comment-head{
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; font-size: .88rem; margin-bottom: .2rem;
+}
+.comment-author{ font-weight: 700; }
+.comment-time{ color: var(--stone); margin-left: .4rem; }
+
+/* Riservato agli abbonati */
+.teaser{ position: relative; }
+.teaser.is-locked::after{
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3.2em; pointer-events: none;
+  background: linear-gradient(to bottom, transparent, var(--paper));
+}
+.paywall{
+  margin: .4rem 0 0; padding: 1.4rem 1.3rem 1.3rem; background: var(--panel);
+  border-top: 4px solid var(--signal); border-radius: 3px;
+}
+.paywall h2{
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; font-size: 1.15rem; font-weight: 700; margin: 0 0 .35rem;
+}
+.paywall p{ margin: 0 0 1rem; font-size: 1.03rem; line-height: 1.5; }
+.paywall label{
+  display: block; font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600; font-size: .92rem; margin-bottom: .35rem;
+}
+.code-row{ display: flex; flex-wrap: wrap; gap: .6rem; }
+.code-row input{
+  flex: 1 1 11rem; min-width: 0; font: 600 1.05rem/1.2 "Archivo", "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: .06em; text-transform: uppercase; padding: .7rem .8rem;
+  border: 2px solid var(--ink); border-radius: 3px; background: var(--paper); color: var(--ink);
+}
+.code-row button{
+  font: 700 1rem/1 "Archivo", "Helvetica Neue", Arial, sans-serif; padding: .8rem 1.1rem;
+  border: 2px solid var(--ink); border-radius: 3px; background: var(--ink); color: var(--paper); cursor: pointer;
+}
+.code-row button:hover{ background: var(--hill); border-color: var(--hill); }
+.code-row button[disabled]{ opacity: .6; cursor: progress; }
+.paywall .paywall-msg{
+  min-height: 1.4em; margin: .65rem 0 0; font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-size: .92rem; color: var(--alert);
+}
+.story-body .unlocked-note{
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; font-size: .88rem;
+  color: var(--hill); margin: 0 0 1.1rem;
+}
+.reveal{ animation: reveal .45s ease-out; }
+@keyframes reveal{ from{ opacity: 0; transform: translateY(6px); } to{ opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce){ .reveal{ animation: none; } }
+
+.list-title{ font-size: clamp(1.8rem, 5vw, 2.5rem); line-height: 1.1; margin: 0 0 1rem; }
+
+/* Piede */
+.site-footer{ background: var(--panel); border-top: 1px solid var(--rule); }
+.footer-inner{
+  max-width: 72rem; margin: 0 auto; padding: 1.5rem 1.25rem 2.2rem;
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; font-size: .88rem; line-height: 1.5; color: var(--stone);
+}
+.footer-inner p{ margin: 0 0 .4rem; max-width: 46rem; }
+.footer-mark{ font-weight: 800; font-stretch: 72%; font-size: 1.25rem; color: var(--ink); }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <a class="wordmark" href="#home" aria-label="NotOkMugello, torna alla prima pagina"><span class="wm-not">Not</span><span class="wm-ok">Ok</span><span class="wm-place">Mugello</span></a>
+    <p class="tagline">Le notizie del Mugello, anche quando non vanno bene.</p>
+  </div>
+  <nav class="sections" aria-label="Sezioni">
+    <a href="#home" data-nav="home">Prima pagina</a>
+    <a href="#cronaca" data-nav="cronaca">Cronaca</a>
+    <a href="#politica" data-nav="politica">Politica</a>
+    <a href="#eventi" data-nav="eventi">Eventi</a>
+  </nav>
+</header>
+
+<div class="breaking">
+  <div class="breaking-inner">
+    <span class="breaking-label">Ultim’ora</span>
+    <a href="#giardini">Borgo San Daniele, trovato morto ai giardini il funzionario dell’appalto dei bastioni</a>
+  </div>
+</div>
+
+<main>
+
+  <!-- Prima pagina -->
+  <section data-view="home" aria-label="Prima pagina">
+    <div class="home-grid">
+      <div class="home-main">
+        <article class="lead">
+          <a class="lead-link" href="#giardini">
+            <figure class="ph"><div class="ph-box" role="img" aria-label="Foto G1 in arrivo"><span>Foto G1 in arrivo</span></div></figure>
+            <p class="kicker">Cronaca</p>
+            <h2>Borgo San Daniele, trovato morto ai giardini il funzionario che seguiva l’appalto dei bastioni</h2>
+            <p class="standfirst">Michele, 46 anni, lavorava all’ufficio tecnico di Villa Pecori. L’ha trovato all’alba il giardiniere comunale.</p>
+            <p class="meta">di Francesca, 13 novembre 2026</p>
+          </a>
+        </article>
+
+        <h2 class="block-title">Ultime notizie</h2>
+        <ul class="story-list" id="home-list"></ul>
+      </div>
+
+      <aside aria-labelledby="piu-letti">
+        <h2 class="aside-title" id="piu-letti">I più letti</h2>
+        <ol class="ranking">
+          <li><a href="#giardini">Trovato morto ai giardini il funzionario dell’appalto dei bastioni</a></li>
+          <li><a href="#certificato">Appalto dei bastioni, spunta un certificato sospetto</a></li>
+          <li><a href="#fiera">Fiera Agricola da record: 41.300 euro di incassi</a></li>
+          <li><a href="#appalto">Bastioni e giardini, l’appalto va a EdilXeb</a></li>
+        </ol>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Elenco di una sezione -->
+  <section data-view="list" hidden>
+    <h1 class="list-title" id="list-title">Cronaca</h1>
+    <ul class="story-list" id="list-items"></ul>
+  </section>
+
+  <!-- Articolo 1 -->
+  <article class="story" data-view="giardini" hidden>
+    <a class="back" href="#home">Torna alla prima pagina</a>
+    <p class="kicker">Cronaca</p>
+    <h1>Borgo San Daniele, trovato morto ai giardini il funzionario che seguiva l’appalto dei bastioni</h1>
+    <p class="standfirst">Michele, 46 anni, lavorava all’ufficio tecnico di Villa Pecori. L’ha trovato all’alba il giardiniere comunale. Le indagini sono affidate alla Detective Gine.</p>
+    <p class="byline">di <strong>Francesca</strong><br>Pubblicato venerdì 13 novembre 2026 alle 11:20, aggiornato alle 14:05</p>
+    <figure class="ph">
+      <div class="ph-box" role="img" aria-label="Foto G1 in arrivo"><span>Foto G1 in arrivo</span></div>
+      <figcaption>I giardini di Borgo San Daniele, chiusi questa mattina dopo il ritrovamento.</figcaption>
+    </figure>
+    <div class="story-body">
+      <p>Borgo San Daniele si è svegliato con una notizia che nessuno avrebbe voluto leggere. Poco dopo le 6:30 di questa mattina Dario, il giardiniere comunale, ha trovato il corpo di Michele, 46 anni, a terra accanto a un’aiuola dei giardini, a pochi passi da una panchina.</p>
+      <p>«Ho pensato a un malore e ho chiamato subito i soccorsi», racconta Dario, ancora scosso. «Ma non c’era più niente da fare.» Secondo le prime informazioni l’uomo avrebbe battuto la testa sul bordo in pietra dell’aiuola. Gli inquirenti non escludono nessuna ipotesi.</p>
+      <p>I giardini sono rimasti chiusi per tutta la mattina per i rilievi della Scientifica. Le indagini sono affidate alla Detective Gine e alla sua squadra, che nelle prossime ore ascolteranno le persone più vicine alla vittima.</p>
+      <h2 class="story-sub">Chi era Michele</h2>
+      <p>Michele era un volto conosciuto in paese. Funzionario dell’ufficio tecnico di Villa Pecori, era il responsabile dell’appalto per la riqualificazione dei bastioni e dei giardini, aggiudicato il 2 novembre a EdilXeb. Era anche revisore dei conti di MugelFiere, l’associazione che organizza la Fiera Agricola, e ogni mattina prendeva il caffè al Mediceo.</p>
+      <p>«Siamo sconvolti», ha dichiarato l’assessore ai lavori pubblici Luca. «Michele era un funzionario scrupoloso e una persona perbene. Abbiamo piena fiducia negli inquirenti.» EdilXeb, contattata dalla nostra redazione, non ha voluto commentare.</p>
+      <p>Una persona molto vicina a Michele, che ha chiesto di restare anonima, racconta però di giorni difficili. «Negli ultimi tempi era teso, diceva che qualcuno gli faceva pressioni per quell’appalto», ci ha detto. «Una volta mi ha detto: “Se vado avanti, mi fanno pentire”.»</p>
+      <p>Questa sera alle 21 MugelFiere ha organizzato un momento di raccoglimento davanti ai giardini.</p>
+    </div>
+    <section class="comments" aria-labelledby="c-giardini">
+      <h2 class="comments-title" id="c-giardini">Commenti (5)</h2>
+      <ol class="comment-list">
+        <li class="comment"><p class="comment-head"><span class="comment-author">Anonimo</span> <span class="comment-time">13 novembre, 11:42</span></p><p>Una persona gentilissima. Lo vedevo tutte le mattine al Mediceo, sempre col giornale sotto il braccio.</p></li>
+        <li class="comment"><p class="comment-head"><span class="comment-author">Un lettore</span> <span class="comment-time">13 novembre, 12:05</span></p><p>Quell’appalto puzzava dall’inizio. Speriamo che stavolta qualcuno vada fino in fondo.</p></li>
+        <li class="comment"><p class="comment-head"><span class="comment-author">Anonimo</span> <span class="comment-time">13 novembre, 12:31</span></p><p>Ma ai giardini non c’è una telecamera? Ne parlano da anni e poi niente. In zona ce n’è una sola, alle scale dei bastioni.</p></li>
+        <li class="comment"><p class="comment-head"><span class="comment-author">Una lettrice</span> <span class="comment-time">13 novembre, 13:10</span></p><p>Condoglianze alla famiglia e a tutti gli amici di MugelFiere. Che tristezza.</p></li>
+        <li class="comment"><p class="comment-head"><span class="comment-author">Anonimo</span> <span class="comment-time">13 novembre, 13:48</span></p><p>Aspettiamo i fatti prima di parlare di appalti e complotti. Può anche essere stata una disgrazia.</p></li>
+      </ol>
+    </section>
+  </article>
+
+  <!-- Articolo 2, per abbonati -->
+  <article class="story" data-view="certificato" hidden>
+    <a class="back" href="#home">Torna alla prima pagina</a>
+    <p class="kicker">Cronaca</p>
+    <h1>Appalto dei bastioni, spunta un certificato sospetto. EdilXeb: «Tutto regolare»</h1>
+    <p class="standfirst">Michele lo aveva segnalato tre giorni prima di morire. Intanto il suo telefono è stato ritrovato lungo i bastioni.</p>
+    <p class="byline">di <strong>Francesca</strong><br>Pubblicato sabato 14 novembre 2026 alle 9:40</p>
+    <figure class="ph">
+      <div class="ph-box" role="img" aria-label="Foto G2 in arrivo"><span>Foto G2 in arrivo</span></div>
+      <figcaption>Il sentiero sui bastioni, al centro del progetto di riqualificazione.</figcaption>
+    </figure>
+    <div class="story-body">
+      <p class="unlocked-note" id="unlocked-note" hidden>Accesso abbonato attivo</p>
+      <div class="teaser is-locked" id="teaser">
+        <p>C’è un documento al centro dell’appalto per la riqualificazione dei bastioni e dei giardini, e potrebbe non essere quello che sembra.</p>
+      </div>
+      <div class="paywall" id="paywall">
+        <h2>Riservato agli abbonati</h2>
+        <p>Per leggere il resto dell’articolo inserisci il codice della tua tessera.</p>
+        <label for="code">Codice abbonato</label>
+        <div class="code-row">
+          <input id="code" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false">
+          <button type="button" id="unlock">Sblocca l’articolo</button>
+        </div>
+        <p class="paywall-msg" id="paywall-msg" aria-live="polite"></p>
+      </div>
+      <div id="locked-content"></div>
+    </div>
+  </article>
+
+  <!-- Articolo: appalto -->
+  <article class="story" data-view="appalto" hidden>
+    <a class="back" href="#home">Torna alla prima pagina</a>
+    <p class="kicker">Politica</p>
+    <h1>Bastioni e giardini, via libera alla riqualificazione: l’appalto va a EdilXeb</h1>
+    <p class="standfirst">Lavori da 1,2 milioni di euro, cantiere previsto in primavera. Per l’assessore Luca «è un progetto atteso da anni».</p>
+    <p class="byline">di <strong>Francesca</strong><br>Pubblicato martedì 3 novembre 2026 alle 8:15</p>
+    <figure class="ph">
+      <div class="ph-box" role="img" aria-label="Foto G2 in arrivo"><span>Foto G2 in arrivo</span></div>
+      <figcaption>I bastioni lungo il fiume, al centro del progetto di riqualificazione.</figcaption>
+    </figure>
+    <div class="story-body">
+      <p>È ufficiale: sarà EdilXeb a riqualificare i bastioni e i giardini di Borgo San Daniele. La determina di aggiudicazione è stata pubblicata ieri sull’albo online di Villa Pecori.</p>
+      <p>Il progetto prevede il rifacimento del sentiero sui bastioni, nuove panchine, l’illuminazione lungo il fiume e la sistemazione delle aiuole dei giardini. Il valore dell’appalto è di 1,2 milioni di euro, e il cantiere dovrebbe partire a marzo.</p>
+      <p>«È un progetto atteso da anni, che restituisce al paese due luoghi a cui siamo tutti legati», ha commentato l’assessore ai lavori pubblici Luca. Il responsabile del procedimento è Michele, funzionario dell’ufficio tecnico.</p>
+      <p>Il titolare di EdilXeb, Mirco, promette tempi rapidi: «Siamo pronti e conosciamo bene il territorio».</p>
+    </div>
+    <section class="comments" aria-labelledby="c-appalto">
+      <h2 class="comments-title" id="c-appalto">Commenti (2)</h2>
+      <ol class="comment-list">
+        <li class="comment"><p class="comment-head"><span class="comment-author">Anonimo</span> <span class="comment-time">3 novembre, 9:20</span></p><p>Speriamo che mettano finalmente qualche lampione sui bastioni, la sera non si vede nulla.</p></li>
+        <li class="comment"><p class="comment-head"><span class="comment-author">Un lettore</span> <span class="comment-time">3 novembre, 9:47</span></p><p>1,2 milioni per due aiuole e un sentiero? Bah.</p></li>
+      </ol>
+    </section>
+  </article>
+
+  <!-- Articolo: fiera -->
+  <article class="story" data-view="fiera" hidden>
+    <a class="back" href="#home">Torna alla prima pagina</a>
+    <p class="kicker">Eventi</p>
+    <h1>Fiera Agricola da record al Foro Boario: 41.300 euro di incassi</h1>
+    <p class="standfirst">Due giorni di stand, trattori d’epoca e migliaia di visitatori. MugelFiere: «Ogni euro tornerà al paese».</p>
+    <p class="byline">di <strong>Redazione</strong><br>Pubblicato lunedì 26 ottobre 2026 alle 18:30</p>
+    <figure class="ph">
+      <div class="ph-box" role="img" aria-label="Foto IG7 in arrivo"><span>Foto IG7 in arrivo</span></div>
+      <figcaption>Il Foro Boario durante la Fiera Agricola.</figcaption>
+    </figure>
+    <div class="story-body">
+      <p>Numeri mai visti per la Fiera Agricola di Borgo San Daniele. Sabato e domenica il Foro Boario si è riempito di stand, famiglie e trattori d’epoca, e gli incassi hanno toccato quota 41.300 euro.</p>
+      <p>«Un’edizione straordinaria, merito dei volontari che hanno lavorato per settimane», ha detto Andrea, tesoriere di MugelFiere, che ha seguito la cassa per tutto il fine settimana. «Ogni euro tornerà al paese.»</p>
+      <p>Il rendiconto ufficiale sarà presentato al consiglio direttivo dell’associazione dopo la verifica del revisore dei conti.</p>
+    </div>
+    <section class="comments" aria-labelledby="c-fiera">
+      <h2 class="comments-title" id="c-fiera">Commenti (2)</h2>
+      <ol class="comment-list">
+        <li class="comment"><p class="comment-head"><span class="comment-author">Una lettrice</span> <span class="comment-time">26 ottobre, 19:05</span></p><p>Bellissima fiera, i bambini sono impazziti per i trattori!</p></li>
+        <li class="comment"><p class="comment-head"><span class="comment-author">Anonimo</span> <span class="comment-time">26 ottobre, 19:40</span></p><p>Complimenti ai volontari, sempre presenti.</p></li>
+      </ol>
+    </section>
+  </article>
+
+  <!-- Articolo: nebbia -->
+  <article class="story" data-view="nebbia" hidden>
+    <a class="back" href="#home">Torna alla prima pagina</a>
+    <p class="kicker">Cronaca</p>
+    <h1>Nebbia fitta nel Mugello: prudenza sulle strade di campagna</h1>
+    <p class="standfirst">Visibilità sotto i cento metri nelle prime ore del mattino.</p>
+    <p class="byline">di <strong>Redazione</strong><br>Pubblicato giovedì 12 novembre 2026 alle 7:30</p>
+    <div class="story-body">
+      <p>Visibilità sotto i cento metri in diverse zone del Mugello nelle prime ore di oggi. La nebbia dovrebbe diradarsi in mattinata, per poi tornare in serata. Si raccomanda prudenza alla guida, soprattutto sulle strade di campagna.</p>
+    </div>
+  </article>
+
+  <!-- Articolo: biblioteca -->
+  <article class="story" data-view="biblioteca" hidden>
+    <a class="back" href="#home">Torna alla prima pagina</a>
+    <p class="kicker">Eventi</p>
+    <h1>In biblioteca tornano le letture ad alta voce: si parte con il giallo</h1>
+    <p class="standfirst">Ogni martedì alle 18, aperte a tutti.</p>
+    <p class="byline">di <strong>Redazione</strong><br>Pubblicato martedì 10 novembre 2026 alle 12:00</p>
+    <div class="story-body">
+      <p>Tornano le letture ad alta voce della biblioteca comunale, ogni martedì alle 18 e aperte a tutti. Il primo ciclo è dedicato al giallo: si comincia con i grandi classici del genere, e chi vuole può portare il proprio libro preferito.</p>
+    </div>
+  </article>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p class="footer-mark">NotOkMugello</p>
+    <p>NotOkMugello è una testata immaginaria, creata per un gioco investigativo. Persone, fatti e attività sono inventati.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var ARTICLES = [
+    { id: 'certificato', section: 'cronaca', label: 'Cronaca', locked: true,
+      title: 'Appalto dei bastioni, spunta un certificato sospetto. EdilXeb: «Tutto regolare»',
+      summary: 'Michele lo aveva segnalato tre giorni prima di morire.', date: '14 novembre 2026' },
+    { id: 'giardini', section: 'cronaca', label: 'Cronaca', home: false,
+      title: 'Borgo San Daniele, trovato morto ai giardini il funzionario che seguiva l’appalto dei bastioni',
+      summary: 'Michele, 46 anni, lavorava all’ufficio tecnico di Villa Pecori.', date: '13 novembre 2026' },
+    { id: 'nebbia', section: 'cronaca', label: 'Cronaca',
+      title: 'Nebbia fitta nel Mugello: prudenza sulle strade di campagna',
+      summary: 'Visibilità sotto i cento metri nelle prime ore del mattino.', date: '12 novembre 2026' },
+    { id: 'biblioteca', section: 'eventi', label: 'Eventi',
+      title: 'In biblioteca tornano le letture ad alta voce: si parte con il giallo',
+      summary: 'Ogni martedì alle 18, aperte a tutti.', date: '10 novembre 2026' },
+    { id: 'appalto', section: 'politica', label: 'Politica',
+      title: 'Bastioni e giardini, via libera alla riqualificazione: l’appalto va a EdilXeb',
+      summary: 'Lavori da 1,2 milioni di euro, cantiere previsto in primavera.', date: '3 novembre 2026' },
+    { id: 'fiera', section: 'eventi', label: 'Eventi',
+      title: 'Fiera Agricola da record al Foro Boario: 41.300 euro di incassi',
+      summary: 'Due giorni di stand, trattori d’epoca e migliaia di visitatori.', date: '26 ottobre 2026' }
+  ];
+  var SECTIONS = { cronaca: 'Cronaca', politica: 'Politica', eventi: 'Eventi' };
+
+  function item(a){
+    var li = document.createElement('li');
+    var link = document.createElement('a');
+    link.href = '#' + a.id;
+    var k = document.createElement('p'); k.className = 'kicker'; k.textContent = a.label;
+    var h = document.createElement('h3'); h.textContent = a.title;
+    if (a.locked){ var b = document.createElement('span'); b.className = 'badge'; b.textContent = 'Per abbonati'; h.appendChild(b); }
+    var s = document.createElement('p'); s.className = 'summary'; s.textContent = a.summary;
+    var m = document.createElement('p'); m.className = 'meta'; m.textContent = a.date;
+    link.append(k, h, s, m); li.appendChild(link);
+    return li;
+  }
+  var homeList = document.getElementById('home-list');
+  ARTICLES.filter(function(a){ return a.home !== false; }).forEach(function(a){ homeList.appendChild(item(a)); });
+
+  function renderList(key){
+    document.getElementById('list-title').textContent = SECTIONS[key];
+    var ul = document.getElementById('list-items'); ul.textContent = '';
+    ARTICLES.filter(function(a){ return a.section === key; }).forEach(function(a){ ul.appendChild(item(a)); });
+  }
+
+  var views = document.querySelectorAll('[data-view]');
+  function route(){
+    var h = location.hash.replace(/^#/, '');
+    if (!/^[a-z0-9-]*$/.test(h)) h = '';
+    var view = 'home', navKey = 'home', title = 'NotOkMugello';
+    if (SECTIONS[h]){ renderList(h); view = 'list'; navKey = h; title = SECTIONS[h] + ' | NotOkMugello'; }
+    else if (h && h !== 'list' && h !== 'home' && document.querySelector('[data-view="' + h + '"]')){
+      view = h;
+      var a = ARTICLES.filter(function(x){ return x.id === h; })[0];
+      if (a){ navKey = a.section; title = a.title + ' | NotOkMugello'; }
+    }
+    views.forEach(function(el){ el.hidden = el.getAttribute('data-view') !== view; });
+    document.querySelectorAll('[data-nav]').forEach(function(el){
+      if (el.getAttribute('data-nav') === navKey) el.setAttribute('aria-current', 'page'); else el.removeAttribute('aria-current');
+    });
+    document.title = title;
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', route);
+  route();
+
+  /* Articolo per abbonati: il testo è cifrato e si apre solo con il codice della tessera */
+  var LOCK = { salt: '1aDZlGkmLiqoUkxPABpotA==', iv: '+bVGoXsb08k7/q00', data: '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', iter: 150000 };
+  var STORE_KEY = 'notok-tessera';
+  function bytes(b64){ var s = atob(b64), out = new Uint8Array(s.length); for (var i = 0; i < s.length; i++) out[i] = s.charCodeAt(i); return out; }
+  function norm(v){ return (v || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); }
+  function decrypt(code){
+    var enc = new TextEncoder();
+    return crypto.subtle.importKey('raw', enc.encode(code), 'PBKDF2', false, ['deriveKey'])
+      .then(function(base){
+        return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: bytes(LOCK.salt), iterations: LOCK.iter, hash: 'SHA-256' },
+          base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+      })
+      .then(function(key){ return crypto.subtle.decrypt({ name: 'AES-GCM', iv: bytes(LOCK.iv) }, key, bytes(LOCK.data)); })
+      .then(function(buf){ return new TextDecoder().decode(buf); });
+  }
+  var input = document.getElementById('code'), btn = document.getElementById('unlock'), msg = document.getElementById('paywall-msg');
+  function open(html, animate){
+    var box = document.getElementById('locked-content');
+    box.innerHTML = html;
+    if (animate) box.classList.add('reveal');
+    document.getElementById('paywall').hidden = true;
+    document.getElementById('teaser').classList.remove('is-locked');
+    document.getElementById('unlocked-note').hidden = false;
+  }
+  function attempt(){
+    var code = norm(input.value);
+    if (!code){ msg.textContent = 'Scrivi il codice che trovi sulla tessera.'; input.focus(); return; }
+    if (!window.crypto || !crypto.subtle){ msg.textContent = 'Per sbloccare l’articolo apri la pagina da un indirizzo https.'; return; }
+    btn.disabled = true; msg.textContent = '';
+    decrypt(code).then(function(html){
+      open(html, true);
+      try { localStorage.setItem(STORE_KEY, code); } catch (e) {}
+    }).catch(function(){
+      msg.textContent = 'Codice non valido: controlla di averlo scritto come sulla tessera.';
+      input.select();
+    }).then(function(){ btn.disabled = false; });
+  }
+  btn.addEventListener('click', attempt);
+  input.addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.preventDefault(); attempt(); } });
+  try {
+    var saved = localStorage.getItem(STORE_KEY);
+    if (saved && window.crypto && crypto.subtle){ decrypt(saved).then(function(html){ open(html, false); }).catch(function(){}); }
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>
